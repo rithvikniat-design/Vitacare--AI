@@ -35,6 +35,7 @@ function ChatInterface() {
   const [isInitializing, setIsInitializing] = useState(true);
   const [activeChatId, setActiveChatId] = useState<string | null>(chatId);
   const [isAnalyzing, setIsAnalyzing] = useState(false); // separate state for manual fetch
+  const [specialist, setSpecialist] = useState("General");
 
   const {
     messages,
@@ -69,14 +70,20 @@ function ChatInterface() {
 
   const isLoading = isStreamLoading || isAnalyzing;
 
-  // Load chat history if chatId is present
+  // Sync activeChatId with URL parameter
   useEffect(() => {
-    setActiveChatId(chatId);
+    if (chatId !== activeChatId) {
+      setActiveChatId(chatId);
+    }
+  }, [chatId, activeChatId]);
+
+  // Load chat history if activeChatId changes
+  useEffect(() => {
     async function loadChat() {
-      if (chatId) {
+      if (activeChatId) {
         setIsInitializing(true);
         try {
-          const dbMessages = await getMessages(chatId);
+          const dbMessages = await getMessages(activeChatId);
           setMessages(dbMessages.map((m) => ({
             id: m.id,
             role: m.role as "user" | "assistant" | "system",
@@ -177,7 +184,7 @@ function ChatInterface() {
         }
 
         const fakeEvent = new Event("submit") as any;
-        handleFormSubmit(fakeEvent, { data: { chatId: currentChatId }});
+        handleFormSubmit(fakeEvent, { data: { chatId: currentChatId, specialist }});
       } catch (error) {
         console.error("Error sending message:", error);
       }
@@ -245,6 +252,8 @@ function ChatInterface() {
           setInput={setInput}
           onSubmit={customHandleSubmit}
           isLoading={isLoading}
+          specialist={specialist}
+          setSpecialist={setSpecialist}
         />
       </div>
     </div>

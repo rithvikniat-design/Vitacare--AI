@@ -20,11 +20,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
     }
 
-    const { messages }: { messages: Message[] } = await req.json();
+    const { messages, data } = await req.json();
 
     if (!messages || messages.length === 0) {
       return NextResponse.json({ error: "No messages provided." }, { status: 400 });
     }
+
+    const specialist = data?.specialist || "General";
 
     // Fetch user preferred AI provider
     const { data: profile } = await supabase
@@ -34,7 +36,7 @@ export async function POST(req: NextRequest) {
       .single();
 
     // Call the router which handles failover, streaming, and disclaimers
-    const response = await streamMedicalResponse(messages, profile?.ai_provider);
+    const response = await streamMedicalResponse(messages, profile?.ai_provider, specialist);
     return response;
 
   } catch (error: any) {

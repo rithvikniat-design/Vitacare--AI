@@ -89,47 +89,46 @@ export function ChatMessage({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`py-6 px-4 md:px-8 w-full flex justify-center ${
-        isAssistant ? "bg-muted/30 border-y border-border/50" : "bg-background"
+      className={`py-4 px-4 w-full flex ${
+        isAssistant ? "justify-start" : "justify-end"
       }`}
     >
-      <div className="w-full max-w-3xl flex gap-4 md:gap-6">
+      <div className={`flex gap-3 max-w-[85%] md:max-w-[75%] ${isAssistant ? "flex-row" : "flex-row-reverse"}`}>
         <div className="flex-shrink-0 mt-1">
-          {isAssistant ? (
-            <Avatar className="w-8 h-8 md:w-10 md:h-10 border border-primary/20 shadow-sm bg-background">
+          {isAssistant && (
+            <Avatar className="w-8 h-8 border border-primary/20 shadow-sm bg-background">
               <AvatarImage src="/bot-avatar.png" />
-              <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs md:text-sm">
+              <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs">
                 AI
-              </AvatarFallback>
-            </Avatar>
-          ) : (
-            <Avatar className="w-8 h-8 md:w-10 md:h-10 border border-border shadow-sm">
-              <AvatarImage src="" />
-              <AvatarFallback className="bg-secondary text-secondary-foreground font-semibold text-xs md:text-sm">
-                U
               </AvatarFallback>
             </Avatar>
           )}
         </div>
 
-        <div className="flex-1 overflow-hidden flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-sm">
-              {isAssistant ? "Medical Assistant" : "You"}
-            </span>
-          </div>
+        <div className={`flex flex-col gap-1 ${isAssistant ? "items-start" : "items-end"}`}>
+          {isAssistant && (
+            <div className="flex items-center gap-2 mb-1">
+              <span className="font-semibold text-sm text-foreground/80">
+                Medical AI
+              </span>
+            </div>
+          )}
           
           {/* Main Message Content */}
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none 
+          <div className={`prose prose-sm md:prose-base max-w-none 
             prose-headings:font-semibold prose-headings:tracking-tight 
-            prose-a:text-primary hover:prose-a:text-primary/80 
-            prose-p:leading-relaxed break-words
+            prose-p:leading-relaxed break-words rounded-2xl px-4 py-3 shadow-sm ${
+              isAssistant 
+                ? "bg-transparent dark:prose-invert prose-a:text-primary hover:prose-a:text-primary/80" 
+                : "bg-primary/10 text-foreground"
+            }
             prose-table:border-collapse prose-table:w-full prose-td:border prose-td:border-border prose-td:p-2 prose-th:border prose-th:border-border prose-th:p-2 prose-th:bg-muted/50
             prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-pre:p-4 prose-pre:rounded-lg
-            prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-primary prose-code:before:content-none prose-code:after:content-none">
+            prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-primary prose-code:before:content-none prose-code:after:content-none`}
+          >
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {content}
             </ReactMarkdown>

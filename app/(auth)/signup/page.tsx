@@ -43,8 +43,13 @@ export default async function SignUp({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-muted/30">
-      <div className="w-full max-w-md p-8 bg-background border border-border shadow-sm rounded-xl">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-muted/30 relative overflow-hidden">
+      {/* Ambient halo background */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+        <div className="w-[500px] h-[500px] bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 rounded-full blur-[100px] opacity-50 dark:opacity-30"></div>
+      </div>
+      
+      <div className="w-full max-w-md p-8 bg-background/60 backdrop-blur-xl border border-white/10 dark:border-white/5 shadow-2xl rounded-2xl z-10 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <div className="flex flex-col items-center mb-8">
           <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-4">
             <Activity className="w-6 h-6" />

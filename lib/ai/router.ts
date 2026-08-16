@@ -4,7 +4,7 @@ import { MEDICAL_SYSTEM_PROMPT } from "./system-prompt";
 
 const DISCLAIMER = "\n\n*This AI assistant is for educational and informational purposes only. It does not replace consultation with a licensed healthcare professional. Always seek medical advice for diagnosis and treatment.*";
 
-export async function streamMedicalResponse(messages: Message[], preferredProvider?: string) {
+export async function streamMedicalResponse(messages: Message[], preferredProvider?: string, specialist?: string) {
   let providerStr = process.env.AI_PROVIDER_ORDER || "openai,anthropic,google,xai,deepseek,together,openrouter";
   let providerOrder = providerStr.split(",").map(s => s.trim()).filter(Boolean);
 
@@ -20,6 +20,10 @@ export async function streamMedicalResponse(messages: Message[], preferredProvid
     content: m.content,
   })) as CoreMessage[];
 
+  const specialistContext = specialist && specialist !== "General" 
+    ? `\n\n[CONTEXT] You are currently acting as a specialist in: ${specialist}. Tailor your response accordingly.` 
+    : "";
+
   for (const providerName of providerOrder) {
     try {
       console.log(`[AI Router] Attempting to use provider: ${providerName}`);
@@ -28,7 +32,7 @@ export async function streamMedicalResponse(messages: Message[], preferredProvid
       const result = await streamText({
         model,
         maxRetries: 0,
-        system: `${MEDICAL_SYSTEM_PROMPT}\n\nIMPORTANT: You must append the following disclaimer at the very end of your response, exactly as written:\n${DISCLAIMER}`,
+        system: `${MEDICAL_SYSTEM_PROMPT}${specialistContext}\n\nIMPORTANT: You must append the following disclaimer at the very end of your response, exactly as written:\n${DISCLAIMER}`,
         messages: coreMessages,
       });
 

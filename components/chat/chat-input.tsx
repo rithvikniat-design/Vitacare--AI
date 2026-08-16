@@ -19,9 +19,19 @@ interface ChatInputProps {
   setInput: (value: string) => void;
   onSubmit: (file?: AttachedFile) => void;
   isLoading: boolean;
+  specialist?: string;
+  setSpecialist?: (value: string) => void;
 }
 
-export function ChatInput({ input, setInput, onSubmit, isLoading }: ChatInputProps) {
+const SPECIALISTS = [
+  { id: "General", icon: "✨", label: "General" },
+  { id: "Orthopedics", icon: "🦴", label: "Orthopedics" },
+  { id: "Cardiology", icon: "🫀", label: "Cardiology" },
+  { id: "Dermatology", icon: "🩺", label: "Dermatology" },
+  { id: "Neurology", icon: "🧠", label: "Neurology" }
+];
+
+export function ChatInput({ input, setInput, onSubmit, isLoading, specialist = "General", setSpecialist }: ChatInputProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [showUpload, setShowUpload] = useState(false);
   const [attachedFile, setAttachedFile] = useState<AttachedFile | null>(null);
@@ -106,6 +116,27 @@ export function ChatInput({ input, setInput, onSubmit, isLoading }: ChatInputPro
     <div className="p-4 bg-background/80 backdrop-blur-md border-t flex flex-col items-center">
       <div className="w-full max-w-3xl relative">
         
+        {/* Specialist Selector */}
+        {setSpecialist && (
+          <div className="flex flex-wrap items-center gap-2 mb-3 pb-2 overflow-x-auto scrollbar-none">
+            {SPECIALISTS.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => setSpecialist(s.id)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 whitespace-nowrap ${
+                  specialist === s.id 
+                    ? 'bg-blue-500 text-white shadow-sm scale-105' 
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
+                }`}
+              >
+                <span>{s.icon}</span>
+                {s.label}
+              </button>
+            ))}
+          </div>
+        )}
+        
         {/* Upload Dropzone Area */}
         {showUpload && !attachedFile && (
           <div className="mb-4 animate-in fade-in slide-in-from-bottom-2">
@@ -143,7 +174,7 @@ export function ChatInput({ input, setInput, onSubmit, isLoading }: ChatInputPro
             e.preventDefault();
             handleSubmit();
           }}
-          className={`relative flex items-end gap-2 bg-muted/50 border shadow-sm rounded-2xl p-2 transition-all ${isListening ? 'ring-2 ring-red-500/50 border-red-500/50' : 'border-border focus-within:ring-1 focus-within:ring-primary/50'}`}
+          className={`relative flex items-end gap-2 bg-muted/50 border shadow-sm rounded-2xl p-2 transition-all ${isListening ? 'ring-2 ring-red-500/50 border-red-500/50' : 'border-border focus-within:ring-2 focus-within:ring-blue-500/40'}`}
         >
           <div className="flex items-center gap-1 self-end pb-1">
             <TooltipProvider delayDuration={300}>
