@@ -8,6 +8,7 @@ import { PlusCircle, MessageSquare, Settings } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getConversations } from "@/lib/actions/chat";
 import { createClient } from "@/lib/supabase/client";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 type Conversation = {
   id: string;
@@ -124,9 +125,12 @@ export function Sidebar() {
               <span className="text-xs text-muted-foreground truncate">Medical Plan</span>
             </div>
           </div>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" onClick={() => router.push('/profile')}>
-            <Settings className="w-5 h-5" />
-          </Button>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" onClick={() => router.push('/profile')}>
+              <Settings className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>

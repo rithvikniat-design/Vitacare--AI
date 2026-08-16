@@ -3,6 +3,7 @@
 import React, { useState, Suspense } from "react";
 import { Sidebar } from "./sidebar";
 import { MobileSidebar } from "./mobile-sidebar";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface ChatLayoutProps {
   children: React.ReactNode;
@@ -30,28 +31,31 @@ export function ChatLayout({ children }: ChatLayoutProps) {
         {/* Mobile Header (only visible on mobile) */}
         <header className="md:hidden flex items-center justify-between p-4 border-b">
           <h1 className="font-semibold">Medical AI</h1>
-          <button
-            onClick={() => setIsSidebarOpen(true)}
-            className="p-2 -mr-2 rounded-md hover:bg-muted"
-            aria-label="Open sidebar"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-6 h-6"
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="p-2 -mr-2 rounded-md hover:bg-muted"
+              aria-label="Open sidebar"
             >
-              <line x1="3" x2="21" y1="6" y2="6" />
-              <line x1="3" x2="21" y1="12" y2="12" />
-              <line x1="3" x2="21" y1="18" y2="18" />
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-6 h-6"
+              >
+                <line x1="3" x2="21" y1="6" y2="6" />
+                <line x1="3" x2="21" y1="12" y2="12" />
+                <line x1="3" x2="21" y1="18" y2="18" />
+              </svg>
+            </button>
+          </div>
         </header>
 
         <main className="flex-1 relative overflow-hidden">
