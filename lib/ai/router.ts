@@ -43,6 +43,21 @@ export async function streamMedicalResponse(messages: Message[], preferredProvid
       continue;
     }
   }
-  
-  throw lastError || new Error("All configured AI providers failed to respond.");
+  // Instead of throwing, we return a simulated stream response so the UI doesn't crash with a parsing error.
+  const errorMessage = lastError instanceof Error ? lastError.message : String(lastError);
+  const encoder = new TextEncoder();
+  const stream = new ReadableStream({
+    start(controller) {
+      // Send a single text chunk in the Vercel AI stream format (0:"text")
+      controller.enqueue(encoder.encode(`0:"I'm sorry, I encountered an error connecting to my AI providers. Please check your API keys in .env.local.\\n\\nError Details: ${errorMessage}"\n`));
+      controller.close();
+    }
+  });
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "x-vercel-ai-data-stream": "v1"
+    }
+  });
 }
