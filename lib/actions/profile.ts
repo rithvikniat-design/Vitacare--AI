@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 
 export async function getProfile() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -32,7 +32,7 @@ export async function updateProfile(data: {
   ai_provider?: string;
   voice_enabled?: boolean;
 }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

@@ -5,7 +5,7 @@ import { Shield, Users, MessageSquare, ThumbsUp, ThumbsDown } from "lucide-react
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function AdminDashboard() {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   // Verify Admin Role
   const { data: { user } } = await supabase.auth.getUser();
